@@ -5,6 +5,7 @@ from bitcoinlib.keys import HDKey
 
 # Função para consultar o saldo de uma carteira na blockchain
 def consultar_saldo(carteira):
+    print("Consultando saldo...")
     url = f"https://blockchain.info/q/addressbalance/{carteira}?confirmations=6"
     response = requests.get(url)
     
@@ -17,6 +18,7 @@ def consultar_saldo(carteira):
 
 # Função para tentar encontrar a chave privada
 def tentar_encontrar_chave(carteira):
+    print("Iniciando brute force de chaves privadas...")
     # Exemplo: tentar gerar chaves aleatórias e verificar
     for i in range(10000):  # Limite para o loop
         chave_privada = HDKey().private_hex  # Gera uma chave privada aleatória
@@ -41,3 +43,5 @@ if __name__ == "__main__":
     
     # Tentar encontrar a chave privada
     tentar_encontrar_chave(carteira_tesouro)
+    print("Finalizando processo.")
+
