@@ -19,8 +19,8 @@ def consultar_saldo(carteira):
 # Função para tentar encontrar a chave privada
 def tentar_encontrar_chave(carteira):
     print("Iniciando brute force de chaves privadas...")
-    # Exemplo: tentar gerar chaves aleatórias e verificar
-    for i in range(10000):  # Limite para o loop
+    i = 0  # Contador de tentativas
+    while True:  # Loop infinito até encontrar a chave
         chave_privada = HDKey().private_hex  # Gera uma chave privada aleatória
         endereco = HDKey(chave_privada).address()  # Gera o endereço correspondente
         print(f"Tentando chave {i}: {chave_privada} -> {endereco}")
@@ -28,12 +28,14 @@ def tentar_encontrar_chave(carteira):
         if endereco == carteira:
             print(f"Chave encontrada! {chave_privada}")
             break
+        
+        i += 1  # Incrementa o contador de tentativas
 
 if __name__ == "__main__":
     print("Iniciando projeto Caça Tesouro BTC")
     
-    # Exemplo de carteira a ser verificada
-    carteira_tesouro = "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
+    # Endereço da carteira a ser verificada
+    carteira_tesouro = "1CaBVPrwUxbQYYswu32w7Mj4HR4maNoJSX"
     
     # Consultar o saldo da carteira
     saldo = consultar_saldo(carteira_tesouro)
@@ -44,4 +46,3 @@ if __name__ == "__main__":
     # Tentar encontrar a chave privada
     tentar_encontrar_chave(carteira_tesouro)
     print("Finalizando processo.")
-
