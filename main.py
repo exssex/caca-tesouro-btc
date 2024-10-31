@@ -20,9 +20,9 @@ def consultar_saldo(carteira):
 # Função para tentar encontrar a chave privada
 def tentar_encontrar_chave(carteira):
     print("Iniciando brute force de chaves privadas...")
+    i = 0  # Contador de tentativas
     start_time = time.time()
     duration_limit = 3600  # Limite de tempo em segundos (1 hora)
-    i = 0  # Contador de tentativas
 
     # Abre o arquivo de log em modo append
     with open("chave_brute_force.log", "a") as log_file:
@@ -67,3 +67,4 @@ if __name__ == "__main__":
     # Tentar encontrar a chave privada
     tentar_encontrar_chave(carteira_tesouro)
     print("Finalizando processo.")
+
