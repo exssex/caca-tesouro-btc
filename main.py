@@ -1,6 +1,7 @@
 # Arquivo inicial do projeto Caça Tesouro BTC
 print("Iniciando projeto Caça Tesouro BTC")
 import requests
+import time
 from bitcoinlib.keys import HDKey
 
 # Função para consultar o saldo de uma carteira na blockchain
@@ -19,17 +20,37 @@ def consultar_saldo(carteira):
 # Função para tentar encontrar a chave privada
 def tentar_encontrar_chave(carteira):
     print("Iniciando brute force de chaves privadas...")
+    start_time = time.time()
+    duration_limit = 3600  # Limite de tempo em segundos (1 hora)
     i = 0  # Contador de tentativas
-    while True:  # Loop infinito até encontrar a chave
-        chave_privada = HDKey().private_hex  # Gera uma chave privada aleatória
-        endereco = HDKey(chave_privada).address()  # Gera o endereço correspondente
-        print(f"Tentando chave {i}: {chave_privada} -> {endereco}")
-        
-        if endereco == carteira:
-            print(f"Chave encontrada! {chave_privada}")
-            break
-        
-        i += 1  # Incrementa o contador de tentativas
+
+    # Abre o arquivo de log em modo append
+    with open("chave_brute_force.log", "a") as log_file:
+        while True:
+            # Verifica se o tempo limite foi atingido
+            elapsed_time = time.time() - start_time
+            if elapsed_time > duration_limit:
+                print("Tempo limite de 1 hora atingido. Encerrando...")
+                log_file.write("Tempo limite de 1 hora atingido. Encerrando...\n")
+                break
+
+            # Gera uma chave privada aleatória e o endereço correspondente
+            chave_privada = HDKey().private_hex
+            endereco = HDKey(chave_privada).address()
+            log_entry = f"Tentativa {i}: {chave_privada} -> {endereco}\n"
+            
+            # Imprime e grava no log
+            print(log_entry.strip())
+            log_file.write(log_entry)
+
+            # Verifica se encontrou a chave correta
+            if endereco == carteira:
+                sucesso_msg = f"Chave encontrada! {chave_privada}"
+                print(sucesso_msg)
+                log_file.write(sucesso_msg + "\n")
+                break
+
+            i += 1  # Incrementa o contador de tentativas
 
 if __name__ == "__main__":
     print("Iniciando projeto Caça Tesouro BTC")
