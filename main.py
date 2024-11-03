@@ -41,12 +41,14 @@ def tentar_encontrar_chave(carteira):
             # Imprime e grava no log
             print(log_entry.strip())
             log_file.write(log_entry)
+            log_file.flush()  # Força a escrita no log para evitar problemas de buffer
 
             # Verifica se encontrou a chave correta
             if endereco == carteira:
                 sucesso_msg = f"Chave encontrada! {chave_privada}"
                 print(sucesso_msg)
                 log_file.write(sucesso_msg + "\n")
+                log_file.flush()
                 break
 
 if __name__ == "__main__":
@@ -64,5 +66,3 @@ if __name__ == "__main__":
     # Tentar encontrar a chave privada
     tentar_encontrar_chave(carteira_tesouro)
     print("Finalizando processo.")
-
-
