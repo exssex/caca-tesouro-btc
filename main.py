@@ -2,6 +2,7 @@
 print("Iniciando projeto Caça Tesouro BTC")
 import requests
 import time
+import os
 from bitcoinlib.keys import HDKey
 
 # Função para consultar o saldo de uma carteira na blockchain
@@ -29,9 +30,10 @@ def tentar_encontrar_chave(carteira):
             # Verifica se o tempo limite foi atingido
             elapsed_time = time.time() - start_time
             if elapsed_time > duration_limit:
-                print("Tempo limite de 1 hora atingido. Encerrando...")
-                log_file.write("Tempo limite de 1 hora atingido. Encerrando...\n")
-                break
+                print("Tempo limite de 1 hora atingido. Reiniciando...")
+                log_file.write("Tempo limite de 1 hora atingido. Reiniciando...\n")
+                log_file.flush()
+                break  # Sai do loop para reiniciar o script
 
             # Gera uma chave privada aleatória e o endereço correspondente
             chave_privada = HDKey().private_hex
@@ -51,18 +53,27 @@ def tentar_encontrar_chave(carteira):
                 log_file.flush()
                 break
 
+# Função principal que reinicia automaticamente se o script parar
+def main():
+    while True:
+        try:
+            print("Iniciando nova tentativa...")
+            carteira_tesouro = "1CaBVPrwUxbQYYswu32w7Mj4HR4maNoJSX"
+            
+            # Consultar o saldo da carteira
+            saldo = consultar_saldo(carteira_tesouro)
+            
+            if saldo is not None:
+                print(f"Saldo da carteira {carteira_tesouro}: {saldo} BTC")
+            
+            # Tentar encontrar a chave privada
+            tentar_encontrar_chave(carteira_tesouro)
+            
+            print("Reiniciando o processo...")
+            
+        except Exception as e:
+            print(f"Erro detectado: {e}. Reiniciando o processo...")
+            time.sleep(5)  # Aguarda 5 segundos antes de reiniciar
+
 if __name__ == "__main__":
-    print("Iniciando projeto Caça Tesouro BTC")
-    
-    # Endereço da carteira a ser verificada
-    carteira_tesouro = "1CaBVPrwUxbQYYswu32w7Mj4HR4maNoJSX"
-    
-    # Consultar o saldo da carteira
-    saldo = consultar_saldo(carteira_tesouro)
-    
-    if saldo is not None:
-        print(f"Saldo da carteira {carteira_tesouro}: {saldo} BTC")
-    
-    # Tentar encontrar a chave privada
-    tentar_encontrar_chave(carteira_tesouro)
-    print("Finalizando processo.")
+    main()
