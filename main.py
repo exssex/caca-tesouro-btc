@@ -20,7 +20,6 @@ def consultar_saldo(carteira):
 # Função para tentar encontrar a chave privada
 def tentar_encontrar_chave(carteira):
     print("Iniciando brute force de chaves privadas...")
-    i = 0  # Contador de tentativas
     start_time = time.time()
     duration_limit = 3600  # Limite de tempo em segundos (1 hora)
 
@@ -37,7 +36,7 @@ def tentar_encontrar_chave(carteira):
             # Gera uma chave privada aleatória e o endereço correspondente
             chave_privada = HDKey().private_hex
             endereco = HDKey(chave_privada).address()
-            log_entry = f"Tentativa {i}: {chave_privada} -> {endereco}\n"
+            log_entry = f"Tentando chave: {chave_privada} -> {endereco}\n"
             
             # Imprime e grava no log
             print(log_entry.strip())
@@ -49,8 +48,6 @@ def tentar_encontrar_chave(carteira):
                 print(sucesso_msg)
                 log_file.write(sucesso_msg + "\n")
                 break
-
-            i += 1  # Incrementa o contador de tentativas
 
 if __name__ == "__main__":
     print("Iniciando projeto Caça Tesouro BTC")
@@ -67,4 +64,5 @@ if __name__ == "__main__":
     # Tentar encontrar a chave privada
     tentar_encontrar_chave(carteira_tesouro)
     print("Finalizando processo.")
+
 
