@@ -58,7 +58,7 @@ def main():
     while True:
         try:
             print("Iniciando nova tentativa...")
-            carteira_tesouro = "1CaBVPrwUxbQYYswu32w7Mj4HR4maNoJSX"
+            carteira_tesouro = "1BY8GQbnueYofwSuFAT3USAhGjPrkxDdW9"
             
             # Consultar o saldo da carteira
             saldo = consultar_saldo(carteira_tesouro)
