@@ -25,23 +25,27 @@ def consultar_saldo(carteira):
 def tentar_encontrar_chave(carteira):
     print("Iniciando brute force de chaves privadas para Dogecoin...")
     contador = 0
-    while True:
-        chave_privada = HDKey(network=doge_network).private_hex  # Gera uma chave privada aleatória para Dogecoin
-        endereco = HDKey(chave_privada, network=doge_network).address()  # Gera o endereço correspondente
-        
-        print(f"Tentando chave {contador}: {chave_privada} -> {endereco}")
-        contador += 1
+    with open("doge_brute_force_log.txt", "a") as log_file:
+        while True:
+            chave_privada = HDKey(network=doge_network).private_hex  # Gera uma chave privada aleatória para Dogecoin
+            endereco = HDKey(chave_privada, network=doge_network).address()  # Gera o endereço correspondente
+            
+            log_file.write(f"Tentando chave {contador}: {chave_privada} -> {endereco}\n")
+            log_file.flush()  # Grava imediatamente no arquivo
+            print(f"Tentando chave {contador}: {chave_privada} -> {endereco}")
+            contador += 1
 
-        if endereco == carteira:
-            print(f"Chave encontrada! {chave_privada}")
-            break
+            if endereco == carteira:
+                print(f"Chave encontrada! {chave_privada}")
+                log_file.write(f"Chave encontrada! {chave_privada}\n")
+                break
 
 if __name__ == "__main__":
     print("Iniciando projeto Caça Tesouro DOGE")
     
-    # Exemplo de carteira a ser verificada
-    carteira_tesouro = "D6dPhoV3f1hR2L4q6yXb69aZs5FTpCtQEG"  # Substitua pelo endereço alvo
-
+    # Carteira alvo de Dogecoin com saldo conhecido
+    carteira_tesouro = "DPwQPzebSMcN4kzkcdEvqE8rE2r8SfJ8pC"
+    
     # Consultar o saldo da carteira
     saldo = consultar_saldo(carteira_tesouro)
     
@@ -51,3 +55,4 @@ if __name__ == "__main__":
     # Tentar encontrar a chave privada
     tentar_encontrar_chave(carteira_tesouro)
     print("Finalizando processo.")
+
